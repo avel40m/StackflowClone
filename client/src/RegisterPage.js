@@ -5,6 +5,7 @@ import Header1 from "./Header1";
 import Input from "./Input";
 import axios from "axios";
 import UserContext from "./UserContext";
+import { Navigate } from "react-router-dom";
 
 const Container = styled.div`
     margin: 30px 20px;
@@ -16,6 +17,7 @@ class RegisterPage extends Component{
     this.state={
       email: '',
       password: '',
+      redirectToHomePage: false
     }
   }
   login(){
@@ -24,12 +26,19 @@ class RegisterPage extends Component{
       password: this.state.password
     },{withCredentials: true})
     .then(() => {
+      this.context.checkAuth()
+        .then(() => this.setState({redirectToHomePage: true}));
     }).catch(err => console.log(err));
   }
 
   render(){
     return (
-
+      <>
+       {
+        this.state.redirectToHomePage && (
+          <Navigate to='/'/>
+        )
+      }
       <Container>
         <Header1 style={{ marginBottom: "20px" }}>Register</Header1>
         <Input placeholder="email" type='email' value={this.state.email} onChange={e => this.setState({email:e.target.value})} />
@@ -38,6 +47,7 @@ class RegisterPage extends Component{
          onChange={e => this.setState({password:e.target.value})} />
         <BlueButtonLink onClick={() => this.login()}>Register</BlueButtonLink>
       </Container>
+      </>
     );
   }
 };

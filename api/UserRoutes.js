@@ -63,11 +63,22 @@ UserRoutes.get('/profile', (req, res) => {
         .then(rows => {
           if (rows.length === 0) {
             const hashedPassword = bcrypt.hashSync(password,10);
-            db('users').insert({email,password:hashedPassword})
+            db('users').insert({username:email,password:hashedPassword})
               .then(() =>{
-                res.status(201).send('User created');
+                jwt.sign(email,secret,(err,token) => {
+                  if (err) {
+                    res.sendStatus(403);
+                  } else {
+                    res.cookie('token',token)
+                    .status(201)
+                    .send('User created');
+                  }
+                });
               })
-              .catch(err => res.status(422).send(err));
+              .catch(err => {
+                console.log(err);
+                res.status(422).send('User creation failed')
+              });
           }else{
             res.status(422).send('Email already exist in database');
           }
