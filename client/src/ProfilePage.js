@@ -28,7 +28,12 @@ function ProfilePage() {
       {redirectToTheHomePage && <Navigate to="/" />}
       <Container>
         <Header1>Profile</Header1>
-        {user && <BlueButton onClick={() => logout()}>Logout</BlueButton>}
+        {user && (
+          <>
+          <p>Hello user {user.email}</p>
+          <BlueButton onClick={() => logout()}>Logout</BlueButton>
+          </>
+          )}
         {!user && <p>You are not logged in</p>}
       </Container>
     </>

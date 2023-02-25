@@ -80,7 +80,7 @@ UserRoutes.get('/profile', (req, res) => {
                 res.status(422).send('User creation failed')
               });
           }else{
-            res.status(422).send('Email already exist in database');
+            res.status(422).send('Email already exist. Please try to login');
           }
         })
         .catch(err => res.status(422).send(err));
