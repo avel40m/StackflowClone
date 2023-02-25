@@ -74,6 +74,10 @@ UserRoutes.get('/profile', (req, res) => {
         })
         .catch(err => res.status(422).send(err));
   });
+
+  UserRoutes.post('/logout', (req, res) => {
+    res.clearCookie('token').sendStatus(200);
+  });
   
 
 export default UserRoutes;
