@@ -26,4 +26,17 @@ QuestionRoutes.post('/questions', (req,res) => {
       })
 });
 
+QuestionRoutes.get('/questions/:id', (req, res) => {
+  const id = req.params.id;
+  db.select('*')
+    .from('posts')
+    .where({id})
+    .first()
+      .then(question => {
+        res.json(question).send();
+      })
+      .catch(() => res.sendStatus(422));
+
+});
+
 export default QuestionRoutes;

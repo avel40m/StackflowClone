@@ -1,30 +1,44 @@
-import React from 'react'
-import styled from 'styled-components'
-import QuestionRow from './QuestionRow';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import Header1 from './Header1';
-import BlueButtonLink from './BlueButtonLink';
+import ReactMarkdown from "react-markdown";
+import gfm from 'remark-gfm';
 
-const HeaderRow = styled.div`
-    display: grid;
-    grid-template-columns: 1fr min-content;
-    padding: 30px 20px;
+const Container = styled.div`
+    margin: 30px 20px;
 `;
 
-const QuestionPage = () => {
-  return (
-    <main>
-    <HeaderRow>
-      <Header1 style={{margin:0}}>Top Questions</Header1>
-      <BlueButtonLink to='/ask'>Ask&nbsp;Question</BlueButtonLink>
-    </HeaderRow>
-    <QuestionRow />
-    <QuestionRow />
-    <QuestionRow />
-    <QuestionRow />
-    <QuestionRow />
-    <QuestionRow />
-    </main>
-  )
+function QuestionPage(){
+    const { id } = useParams();
+
+    const [question,setQuestion] = useState({});
+
+    function fetchQuestion(){
+        axios.get('http://localhost:3030/questions/' + id)
+            .then(response => {
+                setQuestion(response.data)
+            })
+    }
+
+    useEffect(() => fetchQuestion(),[]);
+
+    return(
+        <>
+
+        <Container>
+            {
+                question && (
+                   <>
+            <Header1>{question.title}</Header1>
+            <ReactMarkdown plugins={{gfm}} children={question.content}></ReactMarkdown>
+                   </> 
+                )
+            }
+        </Container>
+        </>
+    )
 }
 
-export default QuestionPage
+export default QuestionPage;

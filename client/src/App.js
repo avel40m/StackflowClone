@@ -1,7 +1,6 @@
 import {  useEffect, useState } from 'react';
 import { Reset } from 'styled-reset';
 import Header from './Header';
-import QuestionPage from './QuestionPage';
 import AskPage from './AskPage';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalStyle from './GlobalStyles';
@@ -10,6 +9,8 @@ import LoginPage from './LoginPage';
 import axios from 'axios';
 import RegisterPage from './RegisterPage';
 import ProfilePage from './ProfilePage';
+import QuestionsPage from './QuestionsPage';
+import QuestionPage from './QuestionPage';
 
 function App() {
   const [user,setUser] = useState(null);
@@ -45,7 +46,8 @@ function App() {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/register' element={<RegisterPage />} />
-        <Route path='/' element={<QuestionPage />} />
+        <Route path='/questions/:id' element={<QuestionPage />} />
+        <Route path='/' element={<QuestionsPage />} />
       </Routes>
     </UserContext.Provider>
     </BrowserRouter>
