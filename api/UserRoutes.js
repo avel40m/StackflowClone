@@ -1,17 +1,8 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import knex from 'knex';
 import bcrypt from 'bcrypt'
+import db from './db.js';
 
-const db = knex({
-  client: 'mysql',
-  connection: {
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database:'stackoverclone'
-  }
-});
 
 const secret = 'secret123';
 
@@ -41,7 +32,11 @@ UserRoutes.get('/profile', (req, res) => {
           if (err) {
               res.status(403).send();
           }else{
-            res.cookie('token', token).send('ok');
+            db('users')
+              .where({username:email})
+              .update({token})
+                .then(() => res.cookie('token', token).send('ok'))
+                .catch((e) => res.status(422).send(e));
           }
         });
         

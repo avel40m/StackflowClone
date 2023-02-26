@@ -2,6 +2,7 @@ import express from "express";
 import cors from 'cors';
 import cookieParser from "cookie-parser";
 import UserRoutes from "./UserRoutes.js";
+import QuestionRoutes from "./QuestionRoutes.js";
 
 const app = express();
 const port = 3030;
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(UserRoutes);
+app.use(QuestionRoutes);
 
 app.listen(port, () => {
     console.log('Listening on port ' + port);

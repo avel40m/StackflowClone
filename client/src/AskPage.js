@@ -5,6 +5,7 @@ import BlueButton from './BlueButton';
 import Header1 from './Header1';
 import gfm from 'remark-gfm';
 import Input from './Input';
+import axios from 'axios';
 
 const Container = styled.div`
     margin: 30px 20px;
@@ -34,9 +35,22 @@ const PreviewArea = styled.div`
 const AskPage = () => {
   const [questionTitle,setQuestionTitle] = useState('');
   const [questionBody,setQuestionBody] = useState('');
+  
+    function sendQuestion(e){
+      e.preventDefault();
+      console.log('SEND QUESTIONS');
+      axios.post('http://localhost:3030/questions',{
+        title:questionTitle,
+        content:questionBody,
+      },{withCredentials: true})
+      .then(response => console.log(response))
+      .catch(e => console.log(e));
+    }
+  
   return (
     <Container>
         <Header1 style={{marginBottom: '20px'}}>Ask a public Question</Header1>
+        <form onSubmit={(e) => sendQuestion(e)}>
         <Input
         type="text"
         value={questionTitle}
@@ -44,13 +58,16 @@ const AskPage = () => {
         placeholder='Title of your question' />
         <QuestionBodyTextarea
         onChange={e => setQuestionBody(e.target.value)}
-        placeholder='More info about your question.You can use markdown here'>
+        placeholder='More info about your question.You can use markdown here'
+        value={questionBody}>
           {questionBody}
         </QuestionBodyTextarea>
         <PreviewArea>
           <ReactMarkdown plugins={{gfm}} children={questionBody} />
         </PreviewArea>
-        <BlueButton>Post question</BlueButton>
+        <BlueButton type='submit'>Post question</BlueButton>
+
+        </form>
     </Container>
   )
 }
