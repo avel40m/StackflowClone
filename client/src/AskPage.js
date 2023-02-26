@@ -6,6 +6,7 @@ import Header1 from './Header1';
 import gfm from 'remark-gfm';
 import Input from './Input';
 import axios from 'axios';
+import { Navigate } from 'react-router-dom';
 
 const Container = styled.div`
     margin: 30px 20px;
@@ -35,20 +36,28 @@ const PreviewArea = styled.div`
 const AskPage = () => {
   const [questionTitle,setQuestionTitle] = useState('');
   const [questionBody,setQuestionBody] = useState('');
-  
+  const [redirect,setRedirect] = useState('');
+
     function sendQuestion(e){
       e.preventDefault();
-      console.log('SEND QUESTIONS');
       axios.post('http://localhost:3030/questions',{
         title:questionTitle,
         content:questionBody,
       },{withCredentials: true})
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response.data);
+          setRedirect('/questions/'+response.data[0])
+        })
       .catch(e => console.log(e));
     }
   
   return (
     <Container>
+    {
+      redirect && (
+        <Navigate to='/' />
+      )
+    }
         <Header1 style={{marginBottom: '20px'}}>Ask a public Question</Header1>
         <form onSubmit={(e) => sendQuestion(e)}>
         <Input

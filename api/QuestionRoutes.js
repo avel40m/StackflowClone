@@ -18,7 +18,7 @@ QuestionRoutes.post('/questions', (req,res) => {
                 parent_id: null,
                 author_id: user.id
             })
-             .then(() => res.sendStatus(201))
+             .then((data) => res.json(data).sendStatus(201))
              .catch(() => res.sendStatus(422));            
         }else {
             res.status(403).send(user);
@@ -37,6 +37,17 @@ QuestionRoutes.get('/questions/:id', (req, res) => {
       })
       .catch(() => res.sendStatus(422));
 
+});
+
+QuestionRoutes.get('/questions/' , (req, res) => {
+  db.select('*')
+    .from('posts')
+    .where({parent_id:null})
+    .orderBy('id','desc')
+      .then(questions => {
+        res.json(questions).send();
+      })
+      .catch(() => res.sendStatus(422));
 });
 
 export default QuestionRoutes;
